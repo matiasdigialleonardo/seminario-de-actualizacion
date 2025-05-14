@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Lavandina x 1L",
+        "price": 875.25,
+        "stock": 3000
+    },
+    {
+        "id": 4,
+        "name": "Detergente x 500mL",
+        "price": 1102.45,
+        "stock": 2010
+    },
+    {
+        "id": 22,
+        "name": "Jabón en polvo x 250g",
+        "price": 650.22,
+        "stock": 407
+    },
+    {
+        "id": 3000000,
+        "name": "Milanesa de soja 500g",
+        "price": 800000.00,
+        "stock": 2
+    }
+]

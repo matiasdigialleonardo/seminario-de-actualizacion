@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<title>Unidad 1</title>
+</head>
+
+<body>
+
+</body>
+
+<script type="text/javascript">
+    
+// 10. Extienda el programa de modo tal que sólo los/as “Administradores” puedan gestionar las cuentas de
+//  usuario para cada categoría.
+
+//k-v (key: username, value: password)
+let authData = new Map();
+let inventoryData = new Map();
+let lastUsedId = 22;
+const maxLoginFailedAttempts = 3;
+let currentlyLoggedUser = null;
+
+const Roles = {
+    ADMIN: 'administrador',
+    CLIENT: 'cliente',
+    SELLER: 'vendedor',
+    WAREHOUSE: 'deposito'
+};
+
+const Actions = {
+  READ:	'READ',
+  CREATE:	'CREATE',
+  UPDATE:	'UPDATE',
+  DELETE:	'DELETE',
+  BUY:	'BUY',
+  MANAGE_USERS: 'MANAGE_USERS',
+};
+
+const RolePerms = {
+  [Roles.ADMIN]:     [ Actions.READ, Actions.CREATE, Actions.UPDATE, Actions.DELETE, Actions.BUY, Actions.MANAGE_USERS ],
+  [Roles.CLIENT]:    [ Actions.READ, Actions.BUY ],
+  [Roles.SELLER]:    [ Actions.READ, Actions.CREATE, Actions.UPDATE, Actions.BUY ],
+  [Roles.WAREHOUSE]: [ Actions.READ, Actions.CREATE, Actions.UPDATE, Actions.DELETE ]
+};
+
+let userData =
+[
+    {
+        password: '987654',
+        failedLoginCounter: 0,
+        isLocked: false,
+        role: Roles.ADMIN, 
+    },
+    {
+        password: '987654',
+        failedLoginCounter: 0,
+        isLocked: false,
+        role: Roles.CLIENT,
+    },
+    {
+        password: '987654',
+        failedLoginCounter: 0,
+        isLocked: false,
+        role: Roles.SELLER,
+    },
+    {
+        password: '987654',
+        failedLoginCounter: 0,
+        isLocked: false,
+        role: Roles.WAREHOUSE,
+    },
+
+]
+
+authData.set('scorpion', userData[0] );
+authData.set('subZero', userData[1] );
+authData.set('raiden', userData[2] );
+authData.set('kitana', userData[3] );
+
+let productData = [
+    {
+        id: 1,
+        name: 'Lavandina x 1L',
+        price: 875.25,
+        stock: 3000
+    },
+    {
+        id: 4,
+        name: 'Detergente x 500mL',
+        price: 1102.45,
+        stock: 2010
+    },
+    {
+        id: 22,
+        name: 'Jabón en polvo x 250g',
+        price: 650.22,
+        stock: 407
+    }
+];
+
+
+
+inventoryData.set('1', productData[0]);
+inventoryData.set('4', productData[1]);
+inventoryData.set('22', productData[2]);
+
+
+function isValidUserGetData( username )
+{
+    return authData.get(username);
+}
+
+//Si el estado del caso de uso, SIEMPRE comprende dos estados se podría retornar un BOOLEAN en el método de la API
+//Si no se puede garantizar que esto sea así, JAMAS definir un BOOLEAN como tipo de retorno en una método de API.
+//Generalmente se retorna un objeto que tiene estado/descripción||result:
+/*
+{
+    status: OK | FAIL | EXCEPTION
+    result: Si OK -> return value, Si es FAIL/EXCEPTION -> string (descripción del error o ID de error)
+}
+
+*/
+
+function validatePassword(password)
+{
+    let api_return = 
+    {
+        status: false,
+        result: null
+    };
+
+    if (password == undefined || password == null || password == '')
+    {
+        api_return.result = 'PASSWORD_EMPTY'
+        return api_return;
+    }
+
+    if (password.length < 8 || password.length > 16)
+    {
+        api_return.result = 'PASSWORD_WRONG_LENGTH'
+        return api_return;
+    }
+
+    if (!/[A-Z]/.test(password))
+    {
+        api_return.result = 'PASSWORD_NO_CAPS'
+        return api_return;
+    }
+
+    const specialChars = password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g);
+    if (!specialChars || specialChars.length < 2)
+    {
+        api_return.result = 'PASSWORD_NO_SPECIAL_CHARS'
+        return api_return;
+    }
+
+
+
+    api_return.status = true;
+    api_return.result = 'PASSWORD_VALID';
+
+    return api_return;
+
+}
+
+function exitCode()
+{
+    return {status: false, result: 'EXIT'};
+}
+
+function backCode()
+{
+    return {status: false, result: 'BACK'};
+}
+
+function authenticateUser( username, password )
+{
+    let api_return = 
+    {
+        status: false,
+        result: null
+    };
+
+
+    if ( (username != undefined && username != null && username != '') && (password != undefined && password != null && password != '') )
+    {
+        let userData = isValidUserGetData(username);
+
+        if (userData == null)
+        {
+            api_return.status = false;
+            api_return.result = "USER_NOT_FOUND"
+        }
+        else if ( userData.isLocked == false)
+        {
+            if( userData.password === password )
+            {
+                currentlyLoggedUser = username;
+                api_return.status = true;
+                api_return.result = 'USER_LOGGED'
+            }
+            else
+            {
+                api_return.status = false;
+                api_return.result = 'USER_PASSWORD_FAILED';
+
+                userData.failedLoginCounter++;
+                
+                if ( userData.failedLoginCounter == maxLoginFailedAttempts )
+                {
+                    userData.isLocked = true;
+                    api_return.status = false;
+                    api_return.result = 'USER_BLOCKED';
+                }
+            }
+        }
+        else
+        {
+            api_return.status = false;
+            api_return.result = 'USER_BLOCKED';
+        }
+        
+    }
+    
+    return api_return;
+}
+
+function createUser(username_creation_attempt, password_creation_attempt)
+{
+    authData.set(username_creation_attempt, {
+        password: password_creation_attempt,
+        failedLoginCounter: 0,
+        isLocked: false,
+    });
+}
+
+function getUser(username)
+{
+    return authData.get(username);
+}
+
+function getUsers()
+{
+    let api_return = { status: false, result: null}
+
+    if( !checkUserCanPerformAction(Actions.MANAGE_USERS) )
+    {
+        api_return.result = 'PERMISSION_DENIED';
+    }
+    else
+    {
+        api_return.status = true;
+        api_return.result = authData;
+    }
+    
+    return api_return;
+}
+
+
+function changePassword(newPassword)
+{
+    authData.get(currentlyLoggedUser).password = newPassword;
+}
+
+function isValidRole(role)
+{
+    return Object.values(Roles).includes(role);
+}
+
+function changeUserRole(username, newUserRole)
+{
+    let api_return = { status: false, result: null }
+
+    if ( !checkUserCanPerformAction(Actions.MANAGE_USERS )) 
+    {
+        api_return.result = 'PERMISSION_DENIED';
+    }
+    else
+    {
+        let user = getUser(username);
+
+        if( !isValidRole(newUserRole) )
+        {
+            api_return.result == 'ROLE_INVALID'
+        }
+        else
+        {
+            user.role = newUserRole;
+            api_return.status = true;
+        }  
+    }
+
+    return api_return;
+}
+
+function getProduct(product_id)
+{
+    return inventoryData.get(product_id);
+}
+
+function getProducts()
+{
+    let api_return = { status: false, result: null };
+
+    if( !checkUserCanPerformAction(Actions.READ) )
+    {
+        api_return.result = 'PERMISSION_DENIED';
+    }
+    return inventoryData;
+}
+
+function addProduct(name, price, stock)
+{
+    let api_return = { status: false, result: null };
+
+    if( !checkUserCanPerformAction(Actions.CREATE) )
+    {
+        api_return.result = 'PERMISSION_DENIED';
+    }
+    else
+    {
+        let api_return = { status: false, result: false }
+
+        lastUsedId++;
+
+        const newProduct = {
+            id: lastUsedId,
+            name: name,
+            price: price,
+            stock: stock
+        };
+
+        inventoryData.set(lastUsedId, newProduct);
+
+        api_return.status = true;
+        api_return.result = 'PRODUCT_ADDED';
+    }
+
+    return api_return;
+}
+
+function updateProduct(productToUpdate, newProductName, newProductPrice, newProductStock)
+{
+    let api_return = { status: false, result: null };
+
+    if( !checkUserCanPerformAction(Actions.UPDATE) )
+    {
+        api_return.result = 'PERMISSION_DENIED';
+    }
+    else
+    {
+        let product = getProduct(productToUpdate);
+
+        product.name = newProductName;
+        product.price = newProductPrice;
+        product.stock = newProductStock;
+
+        inventoryData.set(productToUpdate, product);
+
+        api_return.status = true;
+        api_return.result = 'PRODUCT_UPDATED'
+    }
+
+    return api_return;
+}
+
+function deleteProduct(articleToDelete)
+{
+    let api_return = { status: false, result: null };
+
+    if( !checkUserCanPerformAction(Actions.DELETE) )
+    {
+        api_return.result = 'PERMISSION_DENIED';
+    }
+    else
+    {
+        inventoryData.delete(articleToDelete);
+        api_return.status = true;
+        api_return.result = 'PRODUCT_DELETED';
+    }
+
+    return api_return;
+}
+
+function checkProductStock(product_id, amountToBuy)
+{
+    let api_return = { status: false, result: null };
+
+    let product = getProduct(product_id);
+
+    if( product.stock >= amountToBuy)
+    {
+        api_return.status = true;
+        api_return.result = 'STOCK_AVAILABLE'
+    }
+
+    return api_return;
+}
+
+function changeProductStock(product_id, amountToBuy)
+{
+    let api_return = { status: false, result: null };
+
+    let product = getProduct(product_id);
+
+    product.stock -= amountToBuy;
+
+    api_return.status = true;
+    api_return.result = 'PRODUCT_STOCK_CHANGED'
+
+    return api_return;
+
+}
+
+function checkUserCanPerformAction(action)
+{
+    let role = getUser(currentlyLoggedUser).role;
+
+    return RolePerms[role].includes(action);
+}
+
+
+//FRONTEND---------------------
+
+function GUI_login()
+{
+    let username = window.prompt("Ingrese su nombre de usuario:");
+    let password = window.prompt("Ingrese contraseña:");
+
+    let api_return = authenticateUser( username, password );
+    
+    if ( api_return.status )
+    {
+        alert('Usuario autenticado exitosamente');
+    }
+    else if ( api_return.status == false )
+    {
+        switch ( api_return.result ) 
+        {
+            case 'USER_BLOCKED':
+                alert('Usuario bloqueado. Contacte al administrador');
+                break;
+
+            case 'USER_PASSWORD_FAILED':
+                alert('Usuario y/o contraseña incorrecta');
+                break;
+
+            case 'USER_NOT_FOUND':
+                alert('El usuario especificado no existe');
+                break;
+
+            default:
+                alert('Error desconocido');
+                break;
+        }
+    }
+
+    return api_return;
+}
+
+function GUI_changePassword()
+{
+    let new_user_password = window.prompt('Ingrese su nueva contraseña')
+    let api_return = validatePassword(new_user_password);
+
+    if( api_return.status == true )
+    {
+        changePassword(new_user_password);
+        alert('Contraseña cambiada exitosamente')
+    }
+    else if ( api_return.status == false )
+    {   
+        switch ( api_return.result ) 
+        {
+            case 'PASSWORD_EMPTY':
+                alert('La contraseña no puede estar vacia');
+                break;
+
+            case 'PASSWORD_WRONG_LENGTH':
+                alert('La contraseña debe tener entre 8 y 16 caracteres');
+                break;
+
+            case 'PASSWORD_NO_CAPS':
+                alert('El La contraseña debe contener al menos una letra mayúscula');
+                break;
+
+            case 'PASSWORD_NO_SPECIAL_CHARS':
+                alert('La contraseña debe contener al menos 2 símbolos especiales');
+                break;
+
+            default:
+                alert('Error desconocido');
+                break;
+        }
+    }
+
+    return api_return;
+}
+
+function GUI_userMenu()
+{
+    let menu_option = window.prompt('1. Cambiar contraseña: \n2. Listar usuarios. \n3. Gestionar roles. \nx. Volver \nSeleccion una opción:')
+
+    let api_return = backCode();
+
+    switch ( menu_option )
+    {
+        case '1':
+            api_return = GUI_changePassword();
+            break;
+
+        case '2':
+            api_return = GUI_listUsers();
+            break;
+
+        case '3':
+            if (!checkUserCanPerformAction(Actions.MANAGE_USERS))
+            {
+                alert('Usted no posee los permisos necesarios para realizar esta acción');
+                api_return.result = exitCode();
+            }
+            else
+            {
+                api_return = GUI_changeUserRole();   
+            }
+            break;
+
+        case 'x':
+            break;
+    }
+
+    if (api_return.result == 'PERMISSION_DENIED')
+    {
+        alert('Usted no posee los permisos necesarios para realizar esta acción');
+    }
+
+    return api_return;
+
+}
+
+function GUI_changeUserRole()
+{
+    let username = window.prompt('Ingrese el nombre de usuario');
+    let newUserRole = window.prompt('Inrese el nuevo rol del usuario');
+
+    let api_return = changeUserRole(username, newUserRole);
+
+    if ( api_return.status )
+    {
+        alert('Rol cambiado correctamente');
+    }
+    else
+    {
+        alert('El rol ingresado no es valido');
+    }
+
+    return api_return;
+
+}
+
+function GUI_listUsers()
+{
+    let api_return = getUsers();
+
+    if( api_return.status == true)
+    {
+        usersData = api_return.result;
+
+        for (let [key, user] of usersData)
+        {
+            window.alert(
+                `Nombre de usuario: ${key}\n` +
+                `Esta bloqueado: ${user.isLocked}\n` +
+                `Rol: ${user.role}\n`
+            );
+        }
+    }
+
+    return api_return;
+}
+
+
+function GUI_createAccount()
+{
+    let username_creation_attempt = window.prompt('Ingrese un nombre de usuario:')
+    let password_creation_attempt = window.prompt('Ingrese una contraseña:')
+
+    let api_return = authenticateUser(username_creation_attempt, password_creation_attempt);
+
+    if( api_return.result == 'USER_NOT_FOUND')
+    {
+        api_return = validatePassword(password_creation_attempt);
+
+        if( api_return.result == 'PASSWORD_VALID')
+        {
+            createUser(username_creation_attempt, password_creation_attempt);
+        }
+    }
+
+    return api_return;
+}
+
+function GUI_indexMenu()
+{
+    let menu_option = window.prompt('1. Iniciar sesion: \n2. Crear cuenta de usuario: \nx. Salir \n Seleccion una opción:')
+
+    let api_return = exitCode();
+
+    switch( menu_option )
+    {
+        case '1':
+            api_return = loginEventLoop();
+            if( api_return.result == 'USER_BLOCKED')
+            {
+                api_return = exitCode();
+            }
+
+            break;
+        case '2':
+            api_return = GUI_createAccount();
+            break;
+
+        case 'x':
+            break;
+    }
+
+    return api_return;
+}
+
+function GUI_productsMenu()
+{
+    let menu_option = window.prompt('1. Listar articulos: \n2. Nuevo articulo: \n3. Editar articulo: \n4. Eliminar articulo \n5. Comprar articulo \nx. Volver: \nSeleccion una opción:')
+
+    let api_return = backCode();
+
+    switch( menu_option )
+    {
+        case '1':
+            api_return = GUI_listProducts();
+            break;
+
+        case '2':
+            api_return = GUI_addProduct();
+            break;
+
+        case '3':
+            api_return = GUI_updateProduct();
+            break;
+
+        case '4':
+            api_return = GUI_deleteProduct();
+            break;
+        case '5':
+            api_return = GUI_buyProduct();
+            break;
+    }
+
+    if (api_return.result == 'PERMISSION_DENIED')
+    {
+        alert('Usted no posee los permisos necesarios para realizar esta acción');
+    }
+
+    return api_return;
+}
+
+function GUI_listProducts()
+{
+    let products = getProducts();
+
+    for (let [key, product] of products)
+    {
+        window.alert(
+            `ID: ${product.id}\n` +
+            `Name: ${product.name}\n` +
+            `Price: $${product.price}\n` +
+            `Stock: ${product.stock}\n`
+        );
+    }
+
+    return { status: true, result: 'PRODUCTS_LISTED'}
+}
+
+function GUI_addProduct()
+{
+    let newProductName = window.prompt('Ingrese el nombre del articulo: ');
+    let newProductPrice = window.prompt('Ingrese el precio del articulo: ');
+    let newProductStock = window.prompt('Ingrese el stock del articulo: ');
+
+    let api_return = addProduct(newProductName, newProductPrice, newProductStock);
+
+    return api_return;
+
+}
+
+function GUI_editProduct()
+{
+    let articleToEdit = window.prompt('Ingrese el id del artículo a modificar');
+
+    let newProductName = window.prompt('Ingrese el nuevo nombre');
+    let newProductPrice = window.prompt('Ingrese el nuevo precio');
+    let newProductStock = window.prompt('Ingrese el nuevo stock');
+
+    let api_return = updateProduct(articleToEdit, newProductName, newProductPrice, newProductStock);
+
+    return api_return;
+
+}
+
+function GUI_deleteProduct()
+{
+    let articleToDelete = window.prompt('Ingrese el id del articulo a eliminar');
+
+    let api_return = deleteProduct(articleToDelete);
+
+    return api_return;
+}
+
+
+// Originalmente se obtenia el producto y se enviaba por parametro a la funcion checkProductStock, es mas seguro enviar el id y mandarlo por 
+// parametro como se esta haciendo en esta funcion actualmente.
+function GUI_buyProduct()
+{
+    let product_id = window.prompt('Ingrese el id del articulo que desea comprar');
+    let amountToBuy = window.prompt('Ingrese la cantidad que desea comprar');
+    let confirmation = false;
+
+    let api_return = checkProductStock(product_id, amountToBuy);
+
+    if( api_return.result != 'STOCK_AVAILABLE')
+    {
+        alert("No contamos con suficiente stock para procesar su compra.")
+    }
+    else if( api_return.result == 'STOCK_AVAILABLE')
+    {
+        confirmation = confirm('¿Desea confirmar la compra?');
+
+        if (confirmation)
+        {
+            api_return = changeProductStock(product_id, amountToBuy)
+            {
+                if( api_return.result == 'PRODUCT_STOCK_CHANGED' )
+                {
+                    alert('Compra realizada');
+                }
+            }
+        }
+        else
+        {
+            alert('Compra cancelada');
+        }
+    }
+    else if (api_return.status == false )
+    {
+        alert('No se pudo concretar la compra.')
+    }
+
+    return api_return;
+}
+
+function GUI_mainMenu()
+{
+    let menu_option = window.prompt('1. Gestionar usuario: \n2. Gestionar articulos \nx. Salir \nSeleccion una opción:')
+
+    let api_return = exitCode();
+
+    switch( menu_option )
+    {
+        case '1':
+            api_return = GUI_userMenu();
+            while( api_return.result != 'BACK')
+            {
+                api_return = GUI_userMenu();
+            }
+            break;
+
+        case '2':
+            api_return = GUI_productsMenu();
+            while( api_return.result != 'BACK')
+            {
+                api_return = GUI_productsMenu();
+            }
+            break;
+
+        case 'x':
+            break;
+    }
+
+    return api_return;
+}
+
+function loginEventLoop()
+{
+    let attempts = 0;
+    let api_return = GUI_login();
+        
+    while( api_return.result != 'USER_LOGGED' && attempts < maxLoginFailedAttempts - 1 )
+    {
+        attempts++;
+        api_return = GUI_login();
+    }
+
+    return api_return;
+}
+
+function main()
+{
+
+    let api_return = GUI_indexMenu();
+
+    while (api_return.result != 'EXIT')
+    {
+        if (api_return.result == 'USER_LOGGED')
+        {
+            while (api_return.result != 'EXIT')
+            {
+                api_return = GUI_mainMenu();
+            }
+        }
+        else
+        {
+            api_return = GUI_indexMenu();
+        }
+    }
+}
+
+
+window.onload = main;
+
+
+</script>
+
+</html>
