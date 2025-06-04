@@ -27,7 +27,10 @@ class Application
 			}
 			else
 			{
-				this._api_return = this._defaultView.indexMenuView()();
+				if (!(this._api_return == 'USER_BLOCKED'))
+				{
+					this._api_return = this._defaultView.indexMenuView();
+				}
 			}
 		}
 	}

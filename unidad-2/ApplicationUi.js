@@ -3,6 +3,7 @@ class ApplicationUi
     constructor(model)
     {
         this._model = model;
+        this._maxLoginFailedAttempts = 3;
     }
 
     loginView()
@@ -85,10 +86,10 @@ class ApplicationUi
         let attempts = 0;
         let api_return = this.loginView();
             
-        while( api_return.result != 'USER_LOGGED' && attempts < maxLoginFailedAttempts - 1 )
+        while( api_return.result != 'USER_LOGGED' && attempts < this._maxLoginFailedAttempts - 1 )
         {
             attempts++;
-            api_return = loginView();
+            api_return = this.loginView();
         }
 
         return api_return;
@@ -120,7 +121,7 @@ class ApplicationUi
 
         if( api_return.status == true)
         {
-            usersData = api_return.result;
+            let usersData = api_return.result;
 
             for (let [key, user] of usersData)
             {
@@ -300,18 +301,18 @@ class ApplicationUi
                 break;
 
             case '2':
-                api_return = addProductView();
+                api_return = this.addProductView();
                 break;
 
             case '3':
-                api_return = updateProductView();
+                api_return = this.updateProductView();
                 break;
 
             case '4':
-                api_return = deleteProductView();
+                api_return = this.deleteProductView();
                 break;
             case '5':
-                api_return = buyProductView();
+                api_return = this.buyProductView();
                 break;
         }
 
@@ -367,7 +368,7 @@ class ApplicationUi
                 api_return = this.loginEventLoop();
                 if( api_return.result == 'USER_BLOCKED')
                 {
-                    api_return = exitCode();
+                    api_return = this._model.exitCode();
                 }
 
                 break;

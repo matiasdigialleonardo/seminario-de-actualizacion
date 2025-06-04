@@ -109,7 +109,7 @@ class ApplicationModel
 
     checkUserCanPerformAction(action)
     {
-        let role = this.getUser(currentlyLoggedUser).role;
+        let role = this.getUser(this._currentlyLoggedUser).role;
 
         return this.RolePerms[role].includes(action);
     }
@@ -197,7 +197,7 @@ class ApplicationModel
 
                     userData.failedLoginCounter++;
                     
-                    if ( userData.failedLoginCounter == maxLoginFailedAttempts )
+                    if ( userData.failedLoginCounter == this._maxLoginFailedAttempts )
                     {
                         userData.isLocked = true;
                         api_return.status = false;
@@ -223,6 +223,7 @@ class ApplicationModel
             password: password_creation_attempt,
             failedLoginCounter: 0,
             isLocked: false,
+            role: this.Roles.CLIENT,
         });
     }
 
@@ -236,14 +237,14 @@ class ApplicationModel
     {
         let api_return = { status: false, result: null}
 
-        if( !this.checkUserCanPerformAction(Actions.MANAGE_USERS) )
+        if( !this.checkUserCanPerformAction(this.Actions.MANAGE_USERS) )
         {
             api_return.result = 'PERMISSION_DENIED';
         }
         else
         {
             api_return.status = true;
-            api_return.result = authData;
+            api_return.result = this._authData;
         }
         
         return api_return;
@@ -251,7 +252,7 @@ class ApplicationModel
 
     changePassword(newPassword)
     {
-        this._authData.get(currentlyLoggedUser).password = newPassword;
+        this._authData.get(this._currentlyLoggedUser).password = newPassword;
     }
 
     isValidRole(role)
@@ -295,11 +296,11 @@ class ApplicationModel
     {
         let api_return = { status: false, result: null };
 
-        if( !this._checkUserCanPerformAction(this.Actions.READ) )
+        if( !this.checkUserCanPerformAction(this.Actions.READ) )
         {
             api_return.result = 'PERMISSION_DENIED';
         }
-        return inventoryData;
+        return this._inventoryData;
     }
 
     addProduct(name, price, stock)
@@ -317,7 +318,7 @@ class ApplicationModel
             this.lastUsedId++;
 
             const newProduct = {
-                id: lastUsedId,
+                id: this.lastUsedId,
                 name: name,
                 price: price,
                 stock: stock
@@ -325,7 +326,7 @@ class ApplicationModel
 
             let inventoryData = this.getInventoryData();
 
-            inventoryData.set(this.lastUsedId, newProduct);
+            inventoryData.set(String(this.lastUsedId), newProduct);
 
             api_return.status = true;
             api_return.result = 'PRODUCT_ADDED';
@@ -338,7 +339,7 @@ class ApplicationModel
     {
         let api_return = { status: false, result: null };
 
-        if( !this.checkUserCanPerformAction(Actions.UPDATE) )
+        if( !this.checkUserCanPerformAction(this.Actions.UPDATE) )
         {
             api_return.result = 'PERMISSION_DENIED';
         }
@@ -365,7 +366,7 @@ class ApplicationModel
     {
         let api_return = { status: false, result: null };
 
-        if( !this.checkUserCanPerformAction(Actions.DELETE) )
+        if( !this.checkUserCanPerformAction(this.Actions.DELETE) )
         {
             api_return.result = 'PERMISSION_DENIED';
         }
