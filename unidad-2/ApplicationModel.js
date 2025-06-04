@@ -300,7 +300,11 @@ class ApplicationModel
         {
             api_return.result = 'PERMISSION_DENIED';
         }
-        return this._inventoryData;
+
+        api_return.status = true;
+        api_return.result = this._inventoryData;
+
+        return api_return;
     }
 
     addProduct(name, price, stock)

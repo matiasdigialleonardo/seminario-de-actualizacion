@@ -199,7 +199,9 @@ class ApplicationUi
 
     listProductsView()
     {
-        let products = this._model.getProducts();
+        let api_return = this._model.getProducts();
+
+        let products = api_return.result;
 
         for (let [key, product] of products)
         {
