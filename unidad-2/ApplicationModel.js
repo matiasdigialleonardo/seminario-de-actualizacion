@@ -271,7 +271,7 @@ class ApplicationModel
         }
         else
         {
-            let user = getUser(username);
+            let user = this.getUser(username);
 
             if( !this.isValidRole(newUserRole) )
             {
