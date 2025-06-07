@@ -154,16 +154,6 @@ class ApplicationModel
 
     }
 
-    exitCode()
-    {
-        return {status: false, result: 'EXIT'};
-    }
-
-    backCode()
-    {
-        return {status: false, result: 'BACK'};
-    }
-
     authenticateUser( username, password )
     {
         let api_return = 

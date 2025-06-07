@@ -3,6 +3,8 @@ class ApplicationUi
     constructor(model)
     {
         this._model = model;
+        this._current_view = "accountMenuView";
+        this._isRunning = true;
         this._maxLoginFailedAttempts = 3;
     }
 
@@ -160,31 +162,28 @@ class ApplicationUi
     {
         let menu_option = window.prompt('1. Cambiar contraseña: \n2. Listar usuarios. \n3. Gestionar roles. \nx. Volver \nSeleccion una opción:')
 
-        let api_return = this._model.backCode();
+        let api_return = { status: false, result: null };
 
         switch ( menu_option )
         {
             case '1':
                 api_return = this.changePasswordView();
                 break;
-
             case '2':
                 api_return = this.listUsersView();
                 break;
-
             case '3':
                 if (!this._model.checkUserCanPerformAction(this._model.Actions.MANAGE_USERS))
                 {
                     alert('Usted no posee los permisos necesarios para realizar esta acción');
-                    api_return.result = this._model.exitCode();
                 }
                 else
                 {
                     api_return = this.changeUserRoleView();   
                 }
                 break;
-
             case 'x':
+                this._current_view = "mainMenuView";
                 break;
         }
 
@@ -192,9 +191,6 @@ class ApplicationUi
         {
             alert('Usted no posee los permisos necesarios para realizar esta acción');
         }
-
-        return api_return;
-
     }
 
     listProductsView()
@@ -294,7 +290,7 @@ class ApplicationUi
     {
         let menu_option = window.prompt('1. Listar articulos: \n2. Nuevo articulo: \n3. Editar articulo: \n4. Eliminar articulo \n5. Comprar articulo \nx. Volver: \nSeleccion una opción:')
 
-        let api_return = this._model.backCode();
+        let api_return = { status: false, result: null };
 
         switch( menu_option )
         {
@@ -316,6 +312,8 @@ class ApplicationUi
             case '5':
                 api_return = this.buyProductView();
                 break;
+            case 'x':
+                this._current_view = "mainMenuView";
         }
 
         if (api_return.result == 'PERMISSION_DENIED')
@@ -323,66 +321,84 @@ class ApplicationUi
             alert('Usted no posee los permisos necesarios para realizar esta acción');
         }
 
-        return api_return;
     }
 
     mainMenuView()
     {
         let menu_option = window.prompt('1. Gestionar usuario: \n2. Gestionar articulos \nx. Salir \nSeleccion una opción:')
 
-        let api_return = this._model.exitCode();
-
         switch( menu_option )
         {
             case '1':
-                api_return = this.userMenuView();
-                while( api_return.result != 'BACK')
-                {
-                    api_return = this.userMenuView();
-                }
+                this._current_view = "userMenuView";
                 break;
-
             case '2':
-                api_return = this.productsMenuView();
-                while( api_return.result != 'BACK')
-                {
-                    api_return = this.productsMenuView();
-                }
+                this._current_view = "productsMenuView";
                 break;
-
             case 'x':
+                this._current_view = "accountMenuView";
                 break;
         }
-
-        return api_return;
     }
 
-    indexMenuView()
+    accountMenuView()
     {
         let menu_option = window.prompt('1. Iniciar sesion: \n2. Crear cuenta de usuario: \nx. Salir \n Seleccion una opción:')
 
-        let api_return = this._model.exitCode();
+        let api_return = { status: false, result: null };
 
         switch( menu_option )
         {
 
             case '1':
                 api_return = this.loginEventLoop();
-                if( api_return.result == 'USER_BLOCKED')
+                if( api_return.result == 'USER_LOGGED')
                 {
-                    api_return = this._model.exitCode();
+                    this._current_view = "mainMenuView"
                 }
-
                 break;
             case '2':
                 api_return = this.createAccountView();
                 break;
-
             case 'x':
+                this._isRunning = false;
                 break;
         }
+    }
 
-        return api_return;
+    show()
+    {
+        while (this._isRunning)
+        {
+            switch (this._current_view)
+            {
+                case "accountMenuView":
+                {
+                    this.accountMenuView();
+                    break;
+                }
+                case "mainMenuView":
+                {
+                    this.mainMenuView();
+                    break;
+                }
+                case "userMenuView":
+                {
+                    this.userMenuView();
+                    break;
+                }
+                case "productsMenuView":
+                {
+                    this.productsMenuView();
+                    break;
+                }
+                default:
+                {
+                    this._isRunning = false;
+                    break;
+                }
+            }
+        }
     }
 
 }

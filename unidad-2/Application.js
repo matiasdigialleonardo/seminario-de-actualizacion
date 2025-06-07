@@ -9,30 +9,11 @@ class Application
 		this._api_return = null;
 	}
 
-	init()
-	{
-		this._api_return = this._defaultView.indexMenuView();
-	}
+	init() {}
 
 	run()
 	{
-		while (this._api_return.result != 'EXIT')
-		{
-			if (this._api_return.result == 'USER_LOGGED')
-			{
-				while (this._api_return.result != 'EXIT')
-				{
-					this._api_return = this._defaultView.mainMenuView();
-				}
-			}
-			else
-			{
-				if (!(this._api_return == 'USER_BLOCKED'))
-				{
-					this._api_return = this._defaultView.indexMenuView();
-				}
-			}
-		}
+		this._defaultView.show();
 	}
 }
 
