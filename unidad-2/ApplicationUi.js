@@ -4,7 +4,6 @@ class ApplicationUi
     {
         this._model = model;
         this._current_view = "accountMenuView";
-        this._isRunning = true;
         this._maxLoginFailedAttempts = 3;
     }
 
@@ -361,14 +360,14 @@ class ApplicationUi
                 api_return = this.createAccountView();
                 break;
             case 'x':
-                this._isRunning = false;
+                this._model.stop();
                 break;
         }
     }
 
     show()
     {
-        while (this._isRunning)
+        while (this._model._isRunning)
         {
             switch (this._current_view)
             {
@@ -394,7 +393,7 @@ class ApplicationUi
                 }
                 default:
                 {
-                    this._isRunning = false;
+                    this.model.stop();
                     break;
                 }
             }

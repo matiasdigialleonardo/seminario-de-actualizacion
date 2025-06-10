@@ -7,6 +7,7 @@ class ApplicationModel
         this.lastUsedId = 22;
         this._maxLoginFailedAttempts = 3;
         this._currentlyLoggedUser = null;
+        this._isRunning = true;
 
         this.Roles = {
             ADMIN: 'administrador',
@@ -90,6 +91,11 @@ class ApplicationModel
         this._inventoryData.set('4', productData[1]);
         this._inventoryData.set('22', productData[2]);
 
+    }
+
+    stop()
+    {
+        this._isRunning = false;
     }
 
     getInventoryData()
