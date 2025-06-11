@@ -393,7 +393,7 @@ class ApplicationUi
                 }
                 default:
                 {
-                    this.model.stop();
+                    this._model.stop();
                     break;
                 }
             }

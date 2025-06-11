@@ -1,15 +1,16 @@
 import { ApplicationUi } from './ApplicationUi.js';
+import { ApplicationModel } from './ApplicationModel.js';
 
 class Application
 {
-	constructor( apiInstanceObject )
+	constructor()
 	{
-		this._api = apiInstanceObject;
+		this._api = new ApplicationModel();
 		this._defaultView = new ApplicationUi(this._api);		
 		this._api_return = null;
 	}
 
-	init() {}
+	init() {};
 
 	run()
 	{
