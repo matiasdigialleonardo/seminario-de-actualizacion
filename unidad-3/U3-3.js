@@ -51,8 +51,13 @@ class ResponsivePricingTable extends HTMLElement
         let basicPlanSupport = document.createElement('li');
 
         let basicPlanPriceContainer = document.createElement('li');
-        let basicPlanPriceTitle = document.createElement('h2');
         let basicPlanPriceDescription = document.createElement('span');
+
+        this.basicPlanStorageSpace = document.createElement('b');
+        this.basicPlanEmailsQuantity = document.createElement('b');
+        this.basicPlanDomainsQuantity = document.createElement('b');
+        this.basicPlanSupportPeriod = document.createElement('b');
+        this.basicPlanPrice = document.createElement('h2');
 
         let basicPlanSingUpContainer = document.createElement('li');
         let basicPlanSignUpBtn = document.createElement('button');
@@ -66,13 +71,31 @@ class ResponsivePricingTable extends HTMLElement
         basicPlanSupport.classList.add('w3-padding-16');
 
         basicPlanPriceContainer.classList.add('w3-padding-16');
-        basicPlanPriceTitle.classList.add('w3-wide');
+        basicPlanListTitle.classList.add('w3-wide');
         basicPlanPriceDescription.classList.add('w3-opacity');
 
         basicPlanSingUpContainer.classList.add('w3-light-grey', 'w3-padding-24');
         basicPlanSignUpBtn.classList.add('w3-button', 'w3-green', 'w3-padding-large');
 
+        basicPlanListTitle.textContent = "Basic";
+
+        basicPlanStorage.textContent = " Storage";
+        basicPlanEmails.textContent = " Emails";
+        basicPlanDomains.textContent = " Domains";
+        basicPlanSupport.textContent = " Support";
+
+        this.basicPlanStorageS
+
+        basicPlanPriceDescription.textContent = "per month";
+
         basicPlanSignUpBtn.textContent = "Sign Up";
+
+        basicPlanStorage.appendChild(this.basicPlanStorageSpace);
+        basicPlanEmails.appendChild(this.basicPlanEmailsQuantity);
+        basicPlanDomains.appendChild(this.basicPlanDomainsQuantity);
+        basicPlanSupport.appendChild(this.basicPlanSupportPeriod);
+
+
 
         basicPlanListContainer.appendChild(basicPlanListTitle);
         basicPlanListContainer.appendChild(basicPlanStorage);
@@ -80,7 +103,8 @@ class ResponsivePricingTable extends HTMLElement
         basicPlanListContainer.appendChild(basicPlanDomains);
         basicPlanListContainer.appendChild(basicPlanSupport);
 
-        basicPlanPriceContainer.appendChild(basicPlanPriceTitle);
+
+        basicPlanPriceContainer.appendChild(this.basicPlanPrice);
         basicPlanPriceContainer.appendChild(basicPlanPriceDescription);
 
         basicPlanListContainer.appendChild(basicPlanPriceContainer)
@@ -123,6 +147,8 @@ class ResponsivePricingTable extends HTMLElement
 
         proPlanSingUpContainer.classList.add('w3-light-grey', 'w3-padding-24');
         proPlanSignUpBtn.classList.add('w3-button', 'w3-green', 'w3-padding-large');
+
+        proPlanListTitle.textContent = "Pro";
 
         proPlanSignUpBtn.textContent = "Sign Up";
 
@@ -175,6 +201,8 @@ class ResponsivePricingTable extends HTMLElement
         premiumPlanSingUpContainer.classList.add('w3-light-grey', 'w3-padding-24');
         premiumPlanSignUpBtn.classList.add('w3-button', 'w3-green', 'w3-padding-large');
 
+        premiumPlanListTitle.textContent = "Premium";
+
         premiumPlanSignUpBtn.textContent = "Sign Up";
 
         premiumPlanListContainer.appendChild(premiumPlanListTitle);
@@ -199,6 +227,11 @@ class ResponsivePricingTable extends HTMLElement
         this.tablesContainer.appendChild(proPlanContainer);
         this.tablesContainer.appendChild(premiumPlanContainer);
 
+    }
+
+    setBasicPlanStorage(storageSpace)
+    {
+        
     }
 
     connectedCallback()
