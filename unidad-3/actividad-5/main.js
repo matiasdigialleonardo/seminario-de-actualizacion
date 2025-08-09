@@ -1,8 +1,10 @@
+import { WCModalWindow } from './WCComponents/WCModalWindow.js';
 import { WCContactForm } from './WCComponents/WCContactForm.js';
 
 function main()
 {
 	let wcContactForm = new WCContactForm();
+	let wcModalWindow = new WCModalWindow(wcContactForm);
 
 	let modalDialogWCtitle = document.createElement('h2');
 	modalDialogWCtitle.textContent = 'W3.CSS Modal';
@@ -13,11 +15,11 @@ function main()
 	document.body.append(modalDialogWCtitle);
 	document.body.append(openModalDialogWCbtn);
 
-	document.body.append(wcContactForm);
+	document.body.append(wcModalWindow);
 
 	openModalDialogWCbtn.onclick = function()
 	{
-		wcContactForm.modal.style.display = 'block';
+		wcModalWindow.style.display = 'block';
 	}
 
 }

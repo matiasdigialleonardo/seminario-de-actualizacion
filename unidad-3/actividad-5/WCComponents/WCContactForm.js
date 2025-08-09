@@ -4,29 +4,14 @@ class WCContactForm extends HTMLElement
 	{
 		super();
 
-		// Should modal be just 'this', as in, the class itself?
-		this.modal = document.createElement('div');
-		this.modal.classList.add('w3-modal');
-
-		let modalContent = document.createElement('div');
-		modalContent.classList.add('w3-modal-content');
-
-		let modalContainer = document.createElement('div');
-		modalContainer.classList.add('w3-container');
-
-		this.closeModalBtn = document.createElement('span');
-		this.closeModalBtn.classList.add('w3-button', 'w3-display-topright');
-		this.closeModalBtn.textContent = 'x';
-
 		// <form action="/action_page.php" class="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin">
 		// <h2 class="w3-center">Contact Us</h2>
- 		let form = document.createElement('form');
- 		form.classList.add('w3-container', 'w3-card-4', 'w3-light-grey', 'w3-text-blue', 'w3-margin')
+ 		this.classList.add('w3-container', 'w3-card-4', 'w3-light-grey', 'w3-text-blue', 'w3-margin')
 
 		// first name section
 
-		let firstNameSection = document.createElement('div');
-		firstNameSection.classList.add('w3-row', 'w3-section');
+		this.firstNameSection = document.createElement('div');
+		this.firstNameSection.classList.add('w3-row', 'w3-section');
 
 		let firstNameSectionIconContainer = document.createElement('div');
 		firstNameSectionIconContainer.classList.add('w3-col');
@@ -47,13 +32,13 @@ class WCContactForm extends HTMLElement
 		firstNameSectionIconContainer.appendChild(firstNameSectionIcon);
 		firstNameSectionInputContainer.appendChild(firstNameSectionInput);
 
-		firstNameSection.appendChild(firstNameSectionIconContainer);
-		firstNameSection.appendChild(firstNameSectionInputContainer);
+		this.firstNameSection.appendChild(firstNameSectionIconContainer);
+		this.firstNameSection.appendChild(firstNameSectionInputContainer);
 
 		// last name section
 
-		let lastNameSection = document.createElement('div');
-		lastNameSection.classList.add('w3-row', 'w3-section');
+		this.lastNameSection = document.createElement('div');
+		this.lastNameSection.classList.add('w3-row', 'w3-section');
 
 		let lastNameSectionIconContainer = document.createElement('div');
 		lastNameSectionIconContainer.classList.add('w3-col');
@@ -74,13 +59,13 @@ class WCContactForm extends HTMLElement
 		lastNameSectionIconContainer.appendChild(lastNameSectionIcon);
 		lastNameSectionInputContainer.appendChild(lastNameSectionInput);
 
-		lastNameSection.appendChild(lastNameSectionIconContainer);
-		lastNameSection.appendChild(lastNameSectionInputContainer);
+		this.lastNameSection.appendChild(lastNameSectionIconContainer);
+		this.lastNameSection.appendChild(lastNameSectionInputContainer);
 
 		// email section
 
-		let emailSection = document.createElement('div');
-		emailSection.classList.add('w3-row', 'w3-section');
+		this.emailSection = document.createElement('div');
+		this.emailSection.classList.add('w3-row', 'w3-section');
 
 		let emailSectionIconContainer = document.createElement('div');
 		emailSectionIconContainer.classList.add('w3-col');
@@ -101,13 +86,13 @@ class WCContactForm extends HTMLElement
 		emailSectionIconContainer.appendChild(emailSectionIcon);
 		emailSectionInputContainer.appendChild(emailSectionInput);
 
-		emailSection.appendChild(emailSectionIconContainer);
-		emailSection.appendChild(emailSectionInputContainer);
+		this.emailSection.appendChild(emailSectionIconContainer);
+		this.emailSection.appendChild(emailSectionInputContainer);
 
 		// phone section
 
-		let phoneSection = document.createElement('div');
-		phoneSection.classList.add('w3-row', 'w3-section');
+		this.phoneSection = document.createElement('div');
+		this.phoneSection.classList.add('w3-row', 'w3-section');
 
 		let phoneSectionIconContainer = document.createElement('div');
 		phoneSectionIconContainer.classList.add('w3-col');
@@ -128,13 +113,13 @@ class WCContactForm extends HTMLElement
 		phoneSectionIconContainer.appendChild(phoneSectionIcon);
 		phoneSectionInputContainer.appendChild(phoneSectionInput);
 
-		phoneSection.appendChild(phoneSectionIconContainer);
-		phoneSection.appendChild(phoneSectionInputContainer);
+		this.phoneSection.appendChild(phoneSectionIconContainer);
+		this.phoneSection.appendChild(phoneSectionInputContainer);
 
 		// message section
 
-		let messageSection = document.createElement('div');
-		messageSection.classList.add('w3-row', 'w3-section');
+		this.messageSection = document.createElement('div');
+		this.messageSection.classList.add('w3-row', 'w3-section');
 
 		let messageSectionIconContainer = document.createElement('div');
 		messageSectionIconContainer.classList.add('w3-col');
@@ -155,39 +140,21 @@ class WCContactForm extends HTMLElement
 		messageSectionIconContainer.appendChild(messageSectionIcon);
 		messageSectionInputContainer.appendChild(messageSectionInput);
 
-		messageSection.appendChild(messageSectionIconContainer);
-		messageSection.appendChild(messageSectionInputContainer);
+		this.messageSection.appendChild(messageSectionIconContainer);
+		this.messageSection.appendChild(messageSectionInputContainer);
 
 		// button section
 
-		let sendFormButtonContainer = document.createElement('p');
-		sendFormButtonContainer.classList.add('w3-center');
+		this.sendFormButtonContainer = document.createElement('p');
+		this.sendFormButtonContainer.classList.add('w3-center');
 
 		this.sendFormButton = document.createElement('p');
 		this.sendFormButton.classList.add('w3-button', 'w3-section', 'w3-blue', 'w3-ripple');
 		this.sendFormButton.textContent = "Send";
 
-		sendFormButtonContainer.appendChild(this.sendFormButton); 
+		this.sendFormButtonContainer.appendChild(this.sendFormButton); 
 
-		form.appendChild(firstNameSection);
-		form.appendChild(lastNameSection);
-		form.appendChild(emailSection);
-		form.appendChild(phoneSection);
-		form.appendChild(messageSection);
-		form.appendChild(sendFormButtonContainer);
 
-		modalContainer.appendChild(form);
-
-		modalContainer.appendChild(this.closeModalBtn);
-
-		modalContent.appendChild(modalContainer);
-
-		this.modal.appendChild(modalContent);
-	}
-
-	onCloseModalDialogBtnClick(event)
-	{
-		this.modal.style.display = 'none';
 	}
 
 	onSendFormButtonClick(event)
@@ -201,9 +168,14 @@ class WCContactForm extends HTMLElement
 		//Se va a ejecutar siempre cuando el elemento es insertado en el DOM
 		//DOM = Arbol de elementos HTML ya como instancias (objetos) de JS.
 
-		this.appendChild(this.modal);
+		this.appendChild(this.firstNameSection);
+		this.appendChild(this.lastNameSection);
+		this.appendChild(this.emailSection);
+		this.appendChild(this.phoneSection);
+		this.appendChild(this.messageSection);
+		this.appendChild(this.sendFormButtonContainer);
 
-		this.closeModalBtn.onclick = this.onCloseModalDialogBtnClick.bind(this);
+
 		this.sendFormButton.onclick = this.onSendFormButtonClick.bind(this);
 
 	}
