@@ -17,12 +17,6 @@ class WCModalWindow extends HTMLElement
 		this.closeModalBtn.classList.add('w3-button', 'w3-display-topright');
 		this.closeModalBtn.textContent = 'x';
 
-		let modalFirstText =  document.createElement('p');
-		modalFirstText.textContent = 'Some text. Some text. Some text.'
-
-		let modalSecondText = document.createElement('p');
-		modalSecondText.textContent = 'Some text. Some text. Some text.'
-
 		modalContainer.appendChild(this.closeModalBtn);
 
 		modalContainer.appendChild(content);

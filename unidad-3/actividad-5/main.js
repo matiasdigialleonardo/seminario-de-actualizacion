@@ -6,13 +6,13 @@ function main()
 	let wcContactForm = new WCContactForm();
 	let wcModalWindow = new WCModalWindow(wcContactForm);
 
-	let modalDialogWCtitle = document.createElement('h2');
-	modalDialogWCtitle.textContent = 'W3.CSS Modal';
-
 	let openModalDialogWCbtn = document.createElement('button');
-	openModalDialogWCbtn.textContent = 'Open Modal';
+	openModalDialogWCbtn.textContent = 'Contáctenos';
+	openModalDialogWCbtn.style.position = "absolute";
+	openModalDialogWCbtn.style.top = "50%";
+	openModalDialogWCbtn.style.left = "50%";
+	openModalDialogWCbtn.style.transform = "translate(-50%, -50%)";
 
-	document.body.append(modalDialogWCtitle);
 	document.body.append(openModalDialogWCbtn);
 
 	document.body.append(wcModalWindow);
