@@ -15,6 +15,8 @@ class WCFetchAPI extends HTMLElement
       this.userTable = document.createElement('table');
       this.userTable.classList.add('w3-table-all', 'w3-card-4', 'w3-hoverable');
 
+      this.userTableRows = [];
+
       // table headers
 
       let userTableHead = this.userTable.createTHead();
@@ -60,6 +62,18 @@ class WCFetchAPI extends HTMLElement
       return this.userTable.rows.length;
     }
 
+    getRows()
+    {
+      return this.userTable.rows;
+    }
+
+    onRowClick(event)
+    {
+      let row = event.currentTarget;
+
+      console.log(row.cells[0].textContent);
+    }
+
     async onPopulateTableButtonClick(event)
     {
       let response = await fetch('https://jsonplaceholder.typicode.com/users/');
@@ -68,6 +82,8 @@ class WCFetchAPI extends HTMLElement
       for (let rowData of response_json)
       {
         let row = this.userTablebody.insertRow();
+
+        row.onclick = this.onRowClick.bind(this);
 
         let idCell = row.insertCell();
         idCell.textContent = rowData.id;
@@ -88,8 +104,6 @@ class WCFetchAPI extends HTMLElement
         let phoneCell = row.insertCell();
         phoneCell.textContent = rowData.phone;
 
-        console.log(row);
-
       }
     }
 
@@ -107,6 +121,8 @@ class WCFetchAPI extends HTMLElement
     {
       this.populateTableBtn.onclick = this.onPopulateTableButtonClick.bind(this);
       this.clearBtn.onclick = this.onClearButtonClick.bind(this);
+
+      let rows = this.getRows();
     }
     
     disconnectedCallback()
