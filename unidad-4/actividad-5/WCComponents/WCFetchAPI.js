@@ -67,11 +67,23 @@ class WCFetchAPI extends HTMLElement
       return this.userTable.rows;
     }
 
-    onRowClick(event)
+    async onRowClick(event)
     {
       let row = event.currentTarget;
+      let userId = row.cells[0].textContent;
 
-      console.log(row.cells[0].textContent);
+      let response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
+      let response_json = await response.json();
+
+      let contentDiv = document.createElement('div');
+      contentDiv.textContent = response_json.address.street; 
+
+      let modalWindow = new WCModalWindow(contentDiv);
+      modalWindow.show();
+
+      console.log(modalWindow);
+
+      this.appendChild(modalWindow); 
     }
 
     async onPopulateTableButtonClick(event)
@@ -83,7 +95,7 @@ class WCFetchAPI extends HTMLElement
       {
         let row = this.userTablebody.insertRow();
 
-        row.onclick = this.onRowClick.bind(this);
+        row.onclick = this.onRowClick;
 
         let idCell = row.insertCell();
         idCell.textContent = rowData.id;

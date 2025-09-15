@@ -26,11 +26,15 @@ class WCModalWindow extends HTMLElement
 		
 	}
 
+	show()
+	{
+		this.style.display = 'block';
+	}
+
 	onCloseModalDialogBtnClick(event)
 	{
 		this.style.display = 'none';
 	}
-
 
 	connectedCallback()
 	{
