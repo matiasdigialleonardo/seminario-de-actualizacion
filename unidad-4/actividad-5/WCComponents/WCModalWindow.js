@@ -1,6 +1,6 @@
 class WCModalWindow extends HTMLElement
 {
-	constructor(content)
+	constructor()
 	{
 		super();
 
@@ -10,20 +10,31 @@ class WCModalWindow extends HTMLElement
 		this.modalContent = document.createElement('div');
 		this.modalContent.classList.add('w3-modal-content');
 
-		let modalContainer = document.createElement('div');
-		modalContainer.classList.add('w3-container');
+		this.modalContainer = document.createElement('div');
+		this.modalContainer.classList.add('w3-container');
 
 		this.closeModalBtn = document.createElement('span');
 		this.closeModalBtn.classList.add('w3-button', 'w3-display-topright');
 		this.closeModalBtn.textContent = 'x';
 
-		modalContainer.appendChild(this.closeModalBtn);
+		this.modalContent.appendChild(this.closeModalBtn);
 
-		modalContainer.appendChild(content);
-
-		this.modalContent.appendChild(modalContainer);
+		this.modalContent.appendChild(this.modalContainer);
 
 		
+	}
+
+	clearContent()
+	{
+	    while (this.modalContainer.firstChild) {
+	        this.modalContainer.removeChild(this.modalContainer.firstChild);
+	    }
+	}
+
+	setContent(content)
+	{
+		this.clearContent();
+		this.modalContainer.appendChild(content);
 	}
 
 	show()

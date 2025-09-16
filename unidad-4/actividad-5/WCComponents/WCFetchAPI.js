@@ -14,8 +14,7 @@ class WCFetchAPI extends HTMLElement
       
       this.userTable = document.createElement('table');
       this.userTable.classList.add('w3-table-all', 'w3-card-4', 'w3-hoverable');
-
-      this.userTableRows = [];
+      this.modalWindow = new WCModalWindow();
 
       // table headers
 
@@ -52,6 +51,61 @@ class WCFetchAPI extends HTMLElement
 
       this.userTablebody = this.userTable.createTBody();
 
+      // address table
+
+      this.addressTable = document.createElement('table');
+      this.addressTable.classList.add('w3-table-all', 'w3-card-4', 'w3-hoverable');
+
+      let addressTableHead = this.addressTable.createTHead();
+      let addressTableHeaderRow = addressTableHead.insertRow();
+      addressTableHeaderRow.classList.add('w3-blue');
+
+      let addressTableHeaderId = document.createElement('th');
+      addressTableHeaderId.textContent = "ID";
+      addressTableHeaderRow.appendChild(addressTableHeaderId);
+
+      let addressTableHeaderName = document.createElement('th');
+      addressTableHeaderName.textContent = "Nombre";
+      addressTableHeaderRow.appendChild(addressTableHeaderName);
+
+      let addressTableHeaderStreet = document.createElement('th');
+      addressTableHeaderStreet.textContent = "Calle";
+      addressTableHeaderRow.appendChild(addressTableHeaderStreet);
+
+      let addressTableHeaderSuite = document.createElement('th');
+      addressTableHeaderSuite.textContent = "Oficina";
+      addressTableHeaderRow.appendChild(addressTableHeaderSuite);
+
+      let addressTableHeaderCity = document.createElement('th');
+      addressTableHeaderCity.textContent = "Ciudad";
+      addressTableHeaderRow.appendChild(addressTableHeaderCity);
+
+      let addressTableHeaderZipcode = document.createElement('th');
+      addressTableHeaderZipcode.textContent = "Codigo postal";
+      addressTableHeaderRow.appendChild(addressTableHeaderZipcode);
+
+      let addressTableHeaderLatitude = document.createElement('th');
+      addressTableHeaderLatitude.textContent = "Latitud";
+      addressTableHeaderRow.appendChild(addressTableHeaderLatitude);
+
+      let addressTableHeaderLongitude = document.createElement('th');
+      addressTableHeaderLongitude.textContent = "Longitud";
+      addressTableHeaderRow.appendChild(addressTableHeaderLongitude);
+
+      let addressTableHeaderCompanyName = document.createElement('th');
+      addressTableHeaderCompanyName.textContent = "Compañia";
+      addressTableHeaderRow.appendChild(addressTableHeaderCompanyName);
+
+      let addressTableHeaderCatchphrase = document.createElement('th');
+      addressTableHeaderCatchphrase.textContent = "Eslogan";
+      addressTableHeaderRow.appendChild(addressTableHeaderCatchphrase);
+
+      let addressTableHeaderBuzzword = document.createElement('th');
+      addressTableHeaderBuzzword.textContent = "Jerga";
+      addressTableHeaderRow.appendChild(addressTableHeaderBuzzword);
+
+      this.addressTableBody = this.addressTable.createTBody();
+
       this.appendChild(this.populateTableBtn);
       this.appendChild(this.clearBtn);
       this.appendChild(this.userTable);
@@ -69,21 +123,52 @@ class WCFetchAPI extends HTMLElement
 
     async onRowClick(event)
     {
-      let row = event.currentTarget;
-      let userId = row.cells[0].textContent;
+      let currentRow = event.currentTarget;
+      let userId = currentRow.cells[0].textContent;
 
       let response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
       let response_json = await response.json();
 
-      let contentDiv = document.createElement('div');
-      contentDiv.textContent = response_json.address.street; 
+      let row = this.addressTableBody.insertRow();
 
-      let modalWindow = new WCModalWindow(contentDiv);
-      modalWindow.show();
+      let idCell = row.insertCell();
+      idCell.textContent = response_json.id;
 
-      console.log(modalWindow);
+      let nameCell = row.insertCell();
+      nameCell.textContent = response_json.name;
 
-      this.appendChild(modalWindow); 
+      let streetCell = row.insertCell();
+      streetCell.textContent = response_json.address.street;
+
+      let suiteCell = row.insertCell();
+      suiteCell.textContent = response_json.address.suite;
+
+      let cityCell = row.insertCell();
+      cityCell.textContent = response_json.address.city;
+
+      let zipcodeCell = row.insertCell();
+      zipcodeCell.textContent = response_json.address.zipcode;
+
+      let latitudeCell = row.insertCell();
+      latitudeCell.textContent = response_json.address.geo.lat;
+
+      let longitudeCell = row.insertCell();
+      longitudeCell.textContent = response_json.address.geo.lng;
+
+      let companyNameCell = row.insertCell();
+      companyNameCell.textContent = response_json.company.name;
+      
+      let catchPhraseCell = row.insertCell();
+      catchPhraseCell.textContent = response_json.company.catchPhrase;
+
+      let buzzwordsCell = row.insertCell();
+      buzzwordsCell.textContent = response_json.company.bs;
+
+      this.modalWindow.setContent(this.addressTable);
+
+      this.modalWindow.show();
+
+      this.appendChild(this.modalWindow); 
     }
 
     async onPopulateTableButtonClick(event)
@@ -95,7 +180,7 @@ class WCFetchAPI extends HTMLElement
       {
         let row = this.userTablebody.insertRow();
 
-        row.onclick = this.onRowClick;
+        row.onclick = this.onRowClick.bind(this);
 
         let idCell = row.insertCell();
         idCell.textContent = rowData.id;
