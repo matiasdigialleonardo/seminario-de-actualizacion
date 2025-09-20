@@ -116,13 +116,29 @@ class WCFetchAPI extends HTMLElement
       return this.userTable.rows.length;
     }
 
+    getAddressTableLength()
+    {
+      return this.addressTable.rows.length;
+    }
+
     getRows()
     {
       return this.userTable.rows;
     }
 
+    clearAddressTable()
+    {
+      let tableRows = this.getAddressTableLength();
+
+      for (let i = 1; i < tableRows; i++) {
+          this.addressTableBody.deleteRow(0);
+      }
+    }
+
     async onRowClick(event)
     {
+      this.clearAddressTable();
+
       let currentRow = event.currentTarget;
       let userId = currentRow.cells[0].textContent;
 
