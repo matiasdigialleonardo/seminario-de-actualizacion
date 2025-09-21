@@ -1,6 +1,6 @@
 import { WCModalWindow } from './WCModalWindow.js';
 
-class WCFetchAPI extends HTMLElement
+class WCUserTable extends HTMLElement
   {
     constructor()
     {
@@ -60,21 +60,26 @@ class WCFetchAPI extends HTMLElement
       return this.table.rows.length;
     }
 
-    getRows()
+    getTableRows()
     {
       return this.table.rows;
     }
 
+
+    // Should the table have a method to populate itself?
     async onPopulateTableButtonClick(event)
     {
+
+      // this should be done by the fetch API.
+      // data = fetchApi.getData();
       let response = await fetch('https://jsonplaceholder.typicode.com/users/');
       let response_json = await response.json();
       
       for (let rowData of response_json)
       {
-        let row = this.userTablebody.insertRow();
+        let row = this.tablebody.insertRow();
 
-        row.onclick = this.onRowClick.bind(this);
+        // row.onclick = this.onRowClick.bind(this);
 
         let idCell = row.insertCell();
         idCell.textContent = rowData.id;
@@ -103,7 +108,7 @@ class WCFetchAPI extends HTMLElement
       let tableRows = this.getTableLength();
 
       for (let i = 1; i < tableRows; i++) {
-          this.userTablebody.deleteRow(0);
+          this.tablebody.deleteRow(0);
       }
       
     }
@@ -113,7 +118,7 @@ class WCFetchAPI extends HTMLElement
       let tableRows = this.getTableLength();
 
       for (let i = 1; i < tableRows; i++) {
-          this.userTablebody.deleteRow(0);
+          this.tablebody.deleteRow(0);
       }
       
     }
@@ -123,7 +128,7 @@ class WCFetchAPI extends HTMLElement
       this.populateTableBtn.onclick = this.onPopulateTableButtonClick.bind(this);
       this.clearBtn.onclick = this.onClearButtonClick.bind(this);
 
-      let rows = this.getRows();
+      let rows = this.getTableRows();
     }
     
     disconnectedCallback()
@@ -133,6 +138,6 @@ class WCFetchAPI extends HTMLElement
 
   }
 
-customElements.define('x-fetchapi', WCFetchAPI );
+customElements.define('x-wcusertable', WCUserTable );
 
-export { WCFetchAPI }
+export { WCUserTable }
