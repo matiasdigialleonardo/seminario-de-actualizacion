@@ -1,72 +1,68 @@
-import { WCModalWindow } from './WCModalWindow.js';
-
 class WCAddressTable extends HTMLElement
   {
     constructor()
     {
       super();
 
-      this.modalWindow = new WCModalWindow();
+      this.table = document.createElement('table');
+      this.table.classList.add('w3-table-all', 'w3-card-4', 'w3-hoverable');
 
-      this.addressTable = document.createElement('table');
-      this.addressTable.classList.add('w3-table-all', 'w3-card-4', 'w3-hoverable');
+      let tableHead = this.table.createTHead();
+      let tableHeaderRow = tableHead.insertRow();
+      tableHeaderRow.classList.add('w3-blue');
 
-      let addressTableHead = this.addressTable.createTHead();
-      let addressTableHeaderRow = addressTableHead.insertRow();
-      addressTableHeaderRow.classList.add('w3-blue');
+      let tableHeaderId = document.createElement('th');
+      tableHeaderId.textContent = "ID";
+      tableHeaderRow.appendChild(tableHeaderId);
 
-      let addressTableHeaderId = document.createElement('th');
-      addressTableHeaderId.textContent = "ID";
-      addressTableHeaderRow.appendChild(addressTableHeaderId);
+      let tableHeaderName = document.createElement('th');
+      tableHeaderName.textContent = "Nombre";
+      tableHeaderRow.appendChild(tableHeaderName);
 
-      let addressTableHeaderName = document.createElement('th');
-      addressTableHeaderName.textContent = "Nombre";
-      addressTableHeaderRow.appendChild(addressTableHeaderName);
+      let tableHeaderStreet = document.createElement('th');
+      tableHeaderStreet.textContent = "Calle";
+      tableHeaderRow.appendChild(tableHeaderStreet);
 
-      let addressTableHeaderStreet = document.createElement('th');
-      addressTableHeaderStreet.textContent = "Calle";
-      addressTableHeaderRow.appendChild(addressTableHeaderStreet);
+      let tableHeaderSuite = document.createElement('th');
+      tableHeaderSuite.textContent = "Oficina";
+      tableHeaderRow.appendChild(tableHeaderSuite);
 
-      let addressTableHeaderSuite = document.createElement('th');
-      addressTableHeaderSuite.textContent = "Oficina";
-      addressTableHeaderRow.appendChild(addressTableHeaderSuite);
+      let tableHeaderCity = document.createElement('th');
+      tableHeaderCity.textContent = "Ciudad";
+      tableHeaderRow.appendChild(tableHeaderCity);
 
-      let addressTableHeaderCity = document.createElement('th');
-      addressTableHeaderCity.textContent = "Ciudad";
-      addressTableHeaderRow.appendChild(addressTableHeaderCity);
+      let tableHeaderZipcode = document.createElement('th');
+      tableHeaderZipcode.textContent = "Codigo postal";
+      tableHeaderRow.appendChild(tableHeaderZipcode);
 
-      let addressTableHeaderZipcode = document.createElement('th');
-      addressTableHeaderZipcode.textContent = "Codigo postal";
-      addressTableHeaderRow.appendChild(addressTableHeaderZipcode);
+      let tableHeaderLatitude = document.createElement('th');
+      tableHeaderLatitude.textContent = "Latitud";
+      tableHeaderRow.appendChild(tableHeaderLatitude);
 
-      let addressTableHeaderLatitude = document.createElement('th');
-      addressTableHeaderLatitude.textContent = "Latitud";
-      addressTableHeaderRow.appendChild(addressTableHeaderLatitude);
+      let tableHeaderLongitude = document.createElement('th');
+      tableHeaderLongitude.textContent = "Longitud";
+      tableHeaderRow.appendChild(tableHeaderLongitude);
 
-      let addressTableHeaderLongitude = document.createElement('th');
-      addressTableHeaderLongitude.textContent = "Longitud";
-      addressTableHeaderRow.appendChild(addressTableHeaderLongitude);
+      let tableHeaderCompanyName = document.createElement('th');
+      tableHeaderCompanyName.textContent = "Compañia";
+      tableHeaderRow.appendChild(tableHeaderCompanyName);
 
-      let addressTableHeaderCompanyName = document.createElement('th');
-      addressTableHeaderCompanyName.textContent = "Compañia";
-      addressTableHeaderRow.appendChild(addressTableHeaderCompanyName);
+      let tableHeaderCatchphrase = document.createElement('th');
+      tableHeaderCatchphrase.textContent = "Eslogan";
+      tableHeaderRow.appendChild(tableHeaderCatchphrase);
 
-      let addressTableHeaderCatchphrase = document.createElement('th');
-      addressTableHeaderCatchphrase.textContent = "Eslogan";
-      addressTableHeaderRow.appendChild(addressTableHeaderCatchphrase);
+      let tableHeaderBuzzword = document.createElement('th');
+      tableHeaderBuzzword.textContent = "Jerga";
+      tableHeaderRow.appendChild(tableHeaderBuzzword);
 
-      let addressTableHeaderBuzzword = document.createElement('th');
-      addressTableHeaderBuzzword.textContent = "Jerga";
-      addressTableHeaderRow.appendChild(addressTableHeaderBuzzword);
+      this.tableBody = this.table.createTBody();
 
-      this.addressTableBody = this.addressTable.createTBody();
-
-      this.appendChild(this.addressTable);
+      this.appendChild(this.table);
     }
     
     getTableLength()
     {
-      return this.addressTable.rows.length;
+      return this.table.rows.length;
     }
 
     getTableRows()
@@ -74,79 +70,16 @@ class WCAddressTable extends HTMLElement
       return this.userTable.rows;
     }
 
-    clearAddressTable()
+    populateTable(data)
     {
-      let tableRows = this.getAddressTableLength();
-
-      for (let i = 1; i < tableRows; i++) {
-          this.addressTableBody.deleteRow(0);
-      }
-    }
-
-    async onRowClick(event)
-    {
-      this.clearAddressTable();
+      this.cleartable();
 
       let currentRow = event.currentTarget;
       let userId = currentRow.cells[0].textContent;
 
-
-      // This should be done by the fetch api
-      let response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
-      let response_json = await response.json();
-
-      let row = this.addressTableBody.insertRow();
-
-      let idCell = row.insertCell();
-      idCell.textContent = response_json.id;
-
-      let nameCell = row.insertCell();
-      nameCell.textContent = response_json.name;
-
-      let streetCell = row.insertCell();
-      streetCell.textContent = response_json.address.street;
-
-      let suiteCell = row.insertCell();
-      suiteCell.textContent = response_json.address.suite;
-
-      let cityCell = row.insertCell();
-      cityCell.textContent = response_json.address.city;
-
-      let zipcodeCell = row.insertCell();
-      zipcodeCell.textContent = response_json.address.zipcode;
-
-      let latitudeCell = row.insertCell();
-      latitudeCell.textContent = response_json.address.geo.lat;
-
-      let longitudeCell = row.insertCell();
-      longitudeCell.textContent = response_json.address.geo.lng;
-
-      let companyNameCell = row.insertCell();
-      companyNameCell.textContent = response_json.company.name;
-      
-      let catchPhraseCell = row.insertCell();
-      catchPhraseCell.textContent = response_json.company.catchPhrase;
-
-      let buzzwordsCell = row.insertCell();
-      buzzwordsCell.textContent = response_json.company.bs;
-
-      this.modalWindow.setContent(this.addressTable);
-
-      this.modalWindow.show();
-
-      this.appendChild(this.modalWindow); 
-    }
-
-    async onPopulateTableButtonClick(event)
-    {
-      let response = await fetch('https://jsonplaceholder.typicode.com/users/');
-      let response_json = await response.json();
-      
-      for (let rowData of response_json)
+      for (let rowData of data)
       {
-        let row = this.userTablebody.insertRow();
-
-        row.onclick = this.onRowClick.bind(this);
+        let row = this.tableBody.insertRow();
 
         let idCell = row.insertCell();
         idCell.textContent = rowData.id;
@@ -154,27 +87,42 @@ class WCAddressTable extends HTMLElement
         let nameCell = row.insertCell();
         nameCell.textContent = rowData.name;
 
-        let usernameCell = row.insertCell();
-        usernameCell.textContent = rowData.username;
-       
-        let emailCell = row.insertCell();
-        emailCell.textContent = rowData.email;
-        emailCell.classList.add('w3-tag', 'w3-round', 'w3-lime');
+        let streetCell = row.insertCell();
+        streetCell.textContent = rowData.address.street;
 
-        let websiteCell = row.insertCell();
-        websiteCell.textContent = rowData.website;
+        let suiteCell = row.insertCell();
+        suiteCell.textContent = rowData.address.suite;
 
-        let phoneCell = row.insertCell();
-        phoneCell.textContent = rowData.phone;
+        let cityCell = row.insertCell();
+        cityCell.textContent = rowData.address.city;
+
+        let zipcodeCell = row.insertCell();
+        zipcodeCell.textContent = rowData.address.zipcode;
+
+        let latitudeCell = row.insertCell();
+        latitudeCell.textContent = rowData.address.geo.lat;
+
+        let longitudeCell = row.insertCell();
+        longitudeCell.textContent = rowData.address.geo.lng;
+
+        let companyNameCell = row.insertCell();
+        companyNameCell.textContent = rowData.company.name;
+        
+        let catchPhraseCell = row.insertCell();
+        catchPhraseCell.textContent = rowData.company.catchPhrase;
+
+        let buzzwordsCell = row.insertCell();
+        buzzwordsCell.textContent = rowData.company.bs;
 
       }
     }
 
-    onClearButtonClick(event)
+    clearTable(event)
     {
       let tableRows = this.getTableLength();
 
-      for (let i = 1; i < tableRows; i++) {
+      for (let i = 1; i < tableRows; i++)
+      {
           this.userTablebody.deleteRow(0);
       }
       

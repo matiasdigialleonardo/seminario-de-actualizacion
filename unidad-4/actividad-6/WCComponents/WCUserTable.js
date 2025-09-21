@@ -1,5 +1,3 @@
-import { WCModalWindow } from './WCModalWindow.js';
-
 class WCUserTable extends HTMLElement
   {
     constructor()
@@ -67,15 +65,10 @@ class WCUserTable extends HTMLElement
 
 
     // Should the table have a method to populate itself?
-    async onPopulateTableButtonClick(event)
+    populateTable(data)
     {
-
-      // this should be done by the fetch API.
-      // data = fetchApi.getData();
-      let response = await fetch('https://jsonplaceholder.typicode.com/users/');
-      let response_json = await response.json();
       
-      for (let rowData of response_json)
+      for (let rowData of data)
       {
         let row = this.tablebody.insertRow();
 
@@ -103,33 +96,18 @@ class WCUserTable extends HTMLElement
       }
     }
 
-    onClearButtonClick(event)
+    clearTable(event)
     {
       let tableRows = this.getTableLength();
 
-      for (let i = 1; i < tableRows; i++) {
+      for (let i = 1; i < tableRows; i++)
+      {
           this.tablebody.deleteRow(0);
       }
-      
-    }
-    
-    onClearButtonClick(event)
-    {
-      let tableRows = this.getTableLength();
 
-      for (let i = 1; i < tableRows; i++) {
-          this.tablebody.deleteRow(0);
-      }
-      
     }
 
-    connectedCallback()
-    {
-      this.populateTableBtn.onclick = this.onPopulateTableButtonClick.bind(this);
-      this.clearBtn.onclick = this.onClearButtonClick.bind(this);
-
-      let rows = this.getTableRows();
-    }
+    connectedCallback() {};
     
     disconnectedCallback()
     {

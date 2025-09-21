@@ -4,8 +4,8 @@ class WCFetchAPI extends HTMLElement
     {
       super();
       
-      let response = await fetch('https://jsonplaceholder.typicode.com/users/');
-      let response_json = await response.json();
+      // let response = await fetch('https://jsonplaceholder.typicode.com/users/');
+      // let response_json = await response.json();
 
     }
     
@@ -16,7 +16,6 @@ class WCFetchAPI extends HTMLElement
       for (let i = 1; i < tableRows; i++) {
           this.userTablebody.deleteRow(0);
       }
-      
     }
     
     onClearButtonClick(event)
