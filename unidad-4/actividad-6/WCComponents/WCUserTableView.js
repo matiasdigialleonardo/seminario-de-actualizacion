@@ -1,15 +1,9 @@
-class WCUserTable extends HTMLElement
+class WCUserTableView extends HTMLElement
   {
     constructor()
     {
       super();
-      
-      this.populateTableBtn = document.createElement('button');
-      this.clearBtn = document.createElement('button');
-
-      this.populateTableBtn.innerText = 'Popular tabla';
-      this.clearBtn.innerText = 'Limpiar';
-      
+            
       this.table = document.createElement('table');
       this.table.classList.add('w3-table-all', 'w3-card-4', 'w3-hoverable');
 
@@ -68,6 +62,8 @@ class WCUserTable extends HTMLElement
     populateTable(data)
     {
       
+      console.log(data);
+
       for (let rowData of data)
       {
         let row = this.tablebody.insertRow();
@@ -116,6 +112,6 @@ class WCUserTable extends HTMLElement
 
   }
 
-customElements.define('x-wcusertable', WCUserTable );
+customElements.define('x-wcusertableview', WCUserTableView );
 
-export { WCUserTable }
+export { WCUserTableView }

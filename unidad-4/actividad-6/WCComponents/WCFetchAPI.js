@@ -1,39 +1,36 @@
-class WCFetchAPI extends HTMLElement
+class WCFetchAPI extends EventTarget
   {
     constructor()
     {
       super();
-      
-      // let response = await fetch('https://jsonplaceholder.typicode.com/users/');
-      // let response_json = await response.json();
-
     }
-    
-    onClearButtonClick(event)
-    {
-      let tableRows = this.getTableLength();
 
-      for (let i = 1; i < tableRows; i++) {
-          this.userTablebody.deleteRow(0);
-      }
+    async getUser(userId)
+    {
+      let response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
+      let response_json = await response.json();
+
+      return response_json;
     }
-    
-    onClearButtonClick(event)
-    {
-      let tableRows = this.getTableLength();
 
-      for (let i = 1; i < tableRows; i++) {
-          this.userTablebody.deleteRow(0);
-      }
-      
+    async getUsers()
+    {
+      let response = await fetch(`https://jsonplaceholder.typicode.com/users/`);
+      let response_json = await response.json();
+
+      return response_json;
+    }
+
+    async populateTable()
+    {
+      let data = await this.getUsers();
+
+      this.dispatchEvent(new CustomEvent('populateTable', { detail: { data: data } }));
     }
 
     connectedCallback()
     {
-      this.populateTableBtn.onclick = this.onPopulateTableButtonClick.bind(this);
-      this.clearBtn.onclick = this.onClearButtonClick.bind(this);
 
-      let rows = this.getRows();
     }
     
     disconnectedCallback()

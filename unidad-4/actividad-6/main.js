@@ -1,22 +1,12 @@
 import { WCFetchAPI } from './WCComponents/WCFetchAPI.js';
-import { WCUserTable } from './WCComponents/WCUserTable.js';
+import { WCUserTableMenuView } from './WCComponents/WCUserTableMenuView.js';
+import { WCUserTableMenuController } from './WCComponents/WCUserTableMenuController.js';
 
 function main()
 {
-
-  async function initializeTable()
-  {
-	let response = await fetch('https://jsonplaceholder.typicode.com/users/');
-	let data = await response.json();
-
-	let userTable = new WCUserTable();
-	userTable.populateTable(data);
-	document.body.appendChild(userTable);
-  }
-
-  initializeTable();
-
-
+	let menuView = new WCUserTableMenuView();
+	let fetchApi = new WCFetchAPI();
+	let menuController = new WCUserTableMenuController(menuView, fetchApi);
 
 }
 
