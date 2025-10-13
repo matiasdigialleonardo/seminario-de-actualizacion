@@ -230,6 +230,16 @@ class WCFetchAPI extends HTMLElement
       
     }
     
+    onClearButtonClick(event)
+    {
+      let tableRows = this.getTableLength();
+
+      for (let i = 1; i < tableRows; i++) {
+          this.userTablebody.deleteRow(0);
+      }
+      
+    }
+
     connectedCallback()
     {
       this.populateTableBtn.onclick = this.onPopulateTableButtonClick.bind(this);
