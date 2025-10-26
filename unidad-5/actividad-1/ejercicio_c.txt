@@ -1,0 +1,61 @@
+Endpoint: "IAnalyticsService/TrackEvent"
+Método HTTP: POST
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "string": eventName,
+    ["property_key", "property_value"],
+}
+Estructura de datos OUT:
+{
+    "status": status,
+}
+Estructura de datos ERR:
+{
+    "type": "error"
+    "description": "Event could not be tracked"
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IAnalyticsService/GetEventCount"
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+	"string": eventName,
+}
+Estructura de datos OUT:
+{
+    "int": 5
+}
+Estructura de datos ERR:
+{
+    "type": "error"
+    "description": "Invalid eventName"
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IAnalyticsService/GetTopEvents"
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+	"int": limit,
+}
+Estructura de datos OUT:
+{
+	["event_name", 1],
+}
+Estructura de datos ERR:
+{
+    "type": "error"
+    "description": "Example error"
+}
