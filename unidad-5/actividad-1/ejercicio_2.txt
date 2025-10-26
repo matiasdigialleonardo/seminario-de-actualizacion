@@ -1,0 +1,68 @@
+Endpoint: "IProductCatalog/SearchProducts"
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "string": "keyword",
+}
+Estructura de datos OUT:
+[
+    {
+        "id": 2,
+        "name": "example",
+        "price": 
+    }  
+]
+Estructura de datos ERR:
+{
+    "type": "error"
+    "description": "Wrong keyword"
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IProductCatalog/GetProductById"
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "int": id,
+}
+Estructura de datos OUT:
+{
+    "id": 2,
+    "name": "example",
+    "price": 
+}
+Estructura de datos ERR:
+{
+    "type": "error"
+    "description": "Wrong keyword"
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IProductCatalog/UpdateStock"
+Método HTTP: PATCH
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "int": id,
+    "int": newStock
+}
+Estructura de datos OUT:
+{
+    "status": status,
+    "description": "Stock updated"
+}
+Estructura de datos ERR:
+{
+    "type": "error"
+    "description": "Stock could not be updated"
+}

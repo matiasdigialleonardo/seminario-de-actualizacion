@@ -1,0 +1,116 @@
+=================================================================
+
+1.
+
+Endpoint: /IUserService/GetAllUsers
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN: -
+Estructura de datos OUT:
+[
+     {
+         "id":2,
+         "name": "example",
+         "email": "example@example.com"
+     }  
+]
+
+Estructura de datos ERR:
+{
+    "type": "error"
+    "description": "Example error.."
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IUserService/GetUserById"
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "id" : 7
+}
+Estructura de datos OUT:
+{
+     "id":-1,
+     "name": "none",
+     "email": "none@example.com"
+}
+Estructura de datos ERR:
+{
+    "type": "error"
+    "description": "User not found"
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IUserService/CreateUser"
+Método HTTP: POST
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "user" : user,
+}
+Estructura de datos OUT:
+{
+     "type": status,
+     "description": "user created succesfully",
+}
+Estructura de datos ERR:
+{
+    "type": "error"
+    "description": "User could not be created"
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IUserService/UpdateUser"
+Método HTTP: PATCH
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "int": id,
+    "user" : user,
+}
+Estructura de datos OUT:
+{
+     "type": status,
+     "description": "user created succesfully",
+}
+Estructura de datos ERR:
+{
+    "type": "error"
+    "description": "User could not be updated"
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IUserService/DeleteUser"
+Método HTTP: DELETE
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "int": id,
+}
+Estructura de datos OUT:
+{
+     "type": status,
+     "description": "user created succesfully",
+}
+Estructura de datos ERR:
+{
+    "type": "error"
+    "description": "User could not be updated"
+}
+
+=================================================================
