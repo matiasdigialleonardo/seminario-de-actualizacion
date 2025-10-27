@@ -10,11 +10,11 @@ Cabecera salida: -
 Estructura de datos IN: -
 Estructura de datos OUT:
 [
-     {
-         "id":2,
-         "name": "example",
-         "email": "example@example.com"
-     }  
+    {
+        "id":2,
+        "name": "example",
+        "email": "example@example.com"
+    }  
 ]
 
 Estructura de datos ERR:
@@ -36,9 +36,9 @@ Estructura de datos IN:
 }
 Estructura de datos OUT:
 {
-     "id":-1,
-     "name": "none",
-     "email": "none@example.com"
+    "id":-1,
+    "name": "none",
+    "email": "none@example.com"
 }
 Estructura de datos ERR:
 {
@@ -59,8 +59,8 @@ Estructura de datos IN:
 }
 Estructura de datos OUT:
 {
-     "type": status,
-     "description": "user created succesfully",
+    "type": status,
+    "description": "user created succesfully",
 }
 Estructura de datos ERR:
 {

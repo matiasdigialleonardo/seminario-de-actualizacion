@@ -1,0 +1,103 @@
+Endpoint: "IFileStorage/ListFiles"
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "string": directory,
+}
+Estructura de datos OUT:
+[
+    "example_filename_a",
+    "example_filename_b",
+]
+Estructura de datos ERR:
+{
+    "type": "error",
+    "description": "No files found in directory"
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IFileStorage/ReadFile"
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "string": path,
+}
+Estructura de datos OUT:
+{
+    "file_content"
+}
+Estructura de datos ERR:
+[
+    {
+        "type": "FileNotFoundException",
+        "description": ""Archivo no encontrado: " + path"
+    },
+    {
+        "type": "PermissionDeniedException",
+        "description" ""Permiso denegado para: " + path"
+    }
+]
+
+-----------------------------------------------------------------
+
+Endpoint: "IFileStorage/WriteFile"
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "string": path,
+    "string": content
+}
+Estructura de datos OUT:
+{
+    "type": status,
+    "description": "File written"
+}
+Estructura de datos ERR:
+[
+    {
+        "type": "FileNotFoundException",
+        "description": ""Archivo no encontrado: " + path"
+    },
+    {
+        "type": "PermissionDeniedException",
+        "description" ""Permiso denegado para: " + path"
+    }
+]
+
+-----------------------------------------------------------------
+
+Endpoint: "IFileStorage/DeleteFile"
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "string": path
+}
+Estructura de datos OUT:
+{
+    "type": status,
+    "description": "File deleted"
+}
+Estructura de datos ERR:
+[
+    {
+        "type": "FileNotFoundException",
+        "description": ""Archivo no encontrado: " + path"
+    },
+    {
+        "type": "PermissionDeniedException",
+        "description" ""Permiso denegado para: " + path"
+    }
+]

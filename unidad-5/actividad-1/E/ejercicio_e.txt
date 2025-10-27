@@ -1,0 +1,85 @@
+Endpoint: "IAuthService/Login"
+Método HTTP: GET
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "string": "user",
+    "string": "password"
+}
+Estructura de datos OUT:
+{
+    "status": "bool",
+    "description": "User authenticated"
+}
+Estructura de datos ERR:
+{
+    "type": "AuthException",
+    "description": ""Auth Error: " + error_message"
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IAuthService/Logout"
+Método HTTP: POST
+Formato Serializacion: JSON
+Cabecera entrada: {"string": "token"} // Esto va aca?
+Cabecera salida: -
+Estructura de datos IN:
+{
+    -
+}
+Estructura de datos OUT:
+{
+    "status": "bool",
+    "description": "User logged out"
+}
+Estructura de datos ERR:
+{
+    "type": "AuthException",
+    "description": ""Auth Error: " + error_message"
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IAuthService/ValidateToken"
+Método HTTP: POST
+Formato Serializacion: JSON
+Cabecera entrada: {"string": "token"} // Esto va aca?
+Cabecera salida: -
+Estructura de datos IN:
+{
+    -
+}
+Estructura de datos OUT:
+{
+    "type": True,
+    "description": "Token validated"
+}
+Estructura de datos ERR:
+{
+    "type": "AuthException",
+    "description": ""Auth Error: " + error_message"
+}
+
+-----------------------------------------------------------------
+
+Endpoint: "IAuthService/HashPassword"
+Método HTTP: POST
+Formato Serializacion: JSON
+Cabecera entrada: -
+Cabecera salida: -
+Estructura de datos IN:
+{
+    "string": "example_password"
+}
+Estructura de datos OUT:
+{
+    "string": "hased_password"
+}
+Estructura de datos ERR:
+{
+    "type": "AuthException",
+    "description": ""Auth Error: " + error_message"
+}
