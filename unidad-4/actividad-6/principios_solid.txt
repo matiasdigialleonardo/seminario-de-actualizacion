@@ -1,0 +1,8 @@
+Single Responsability Principle
+
+ - Los metodos onRowClick y onPopulateTableButtonClick se encargaban tanto de realizar la llamada fetch al endpoint de la API como de popular la tabla.
+
+Open/Closed
+
+ - Nuevamente en los metodos onRowClick y onPopulateTableButtonClick, la llamada al endpoint dentro de la misma funciona hace que sea necesario modificar el codigo
+ del metodo en caso de que el endpoint llegase cambiar en el futuro.

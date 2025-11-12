@@ -46,7 +46,7 @@ Estructura de datos ERR:
 Endpoint: "IAuthService/ValidateToken"
 Método HTTP: POST
 Formato Serializacion: JSON
-Cabecera entrada: {"string": "token"} // Esto va aca?
+Cabecera entrada: {"string": "token"}
 Cabecera salida: -
 Estructura de datos IN:
 {
@@ -76,7 +76,7 @@ Estructura de datos IN:
 }
 Estructura de datos OUT:
 {
-    "string": "hased_password"
+    "string": "hashed_password"
 }
 Estructura de datos ERR:
 {
